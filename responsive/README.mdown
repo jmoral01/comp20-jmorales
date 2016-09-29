@@ -1,0 +1,5 @@
+README
+
+This webpage displays four different images from one sprite depending on the width of the screen. 
+
+It took a little under an hour to complete.
