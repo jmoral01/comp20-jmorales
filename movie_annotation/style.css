@@ -1,0 +1,21 @@
+body {
+	background-color: #006666;
+	text-align: center;
+	font-variant: small-caps;
+}
+
+#title {
+	font-size: 3em;
+}
+
+#classic_video {
+	display: block;
+	margin: 0 auto;
+}
+
+#movie_quotes {
+	padding: 20px;
+	margin-left: 25%;
+	margin-right: 25%;
+	font-size: 1.5em;
+}

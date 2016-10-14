@@ -1,0 +1,3 @@
+README for movie_annotation
+
+The site displays text that matches up with the vieo sound. It took about an hour to implement the site. 
