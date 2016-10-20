@@ -70,6 +70,44 @@ function displayLocation() {
 		}
 	});
 	marker.setMap(map);
+	haversineForm();
+}
+
+// code used from 
+//http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
+function haversineForm() {
+	Number.prototype.toRad = function() {
+		return (this * Math.PI / 180);
+	}
+	var minDist = null;
+	var temp;
+	var loc;
+	var R; // miles
+	R = 3958.756;
+	for (var i = 0; i < tStops.length; i++) {
+		var x1 = tStops[i][1] - myLat;
+		var dLat = x1.toRad();
+		var x2 = tStops[i][2] - myLng;
+		var dLon = x2.toRad();
+		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+				Math.cos(myLat.toRad()) * Math.cos(tStops[i][1].toRad()) *
+				Math.sin(dLon/2) * Math.sin(dLon/2);
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		temp = R * c;
+		if (temp <= minDist || minDist == null) {
+			minDist = temp;
+			loc = i;
+		}		
+	}
+	var closestLine = new google.maps.Polyline({
+		path: [{lat: myLat, lng: myLng}, 
+				{lat: tStops[loc][1], lng: tStops[loc][2]}],
+		geodesic: true,
+		strokeColor: '#0033CC',
+		strokeCapacity: 1.0,
+		strokeWeight: 2		
+	});
+	closestLine.setMap(map);
 }
 
 function displayTStops() {
