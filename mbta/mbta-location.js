@@ -29,34 +29,9 @@ var tStops = [
 	['Ashmont', 42.284652, -71.06448899999999]
 ];
 
-var redLine1 = [
-	{lat: tStops[0][1], lng: tStops[0][2]},
-	{lat: tStops[1][1], lng: tStops[1][2]},
-	{lat: tStops[2][1], lng: tStops[2][2]},
-	{lat: tStops[3][1], lng: tStops[3][2]},
-	{lat: tStops[4][1], lng: tStops[4][2]},
-	{lat: tStops[5][1], lng: tStops[5][2]},
-	{lat: tStops[6][1], lng: tStops[6][2]},
-	{lat: tStops[7][1], lng: tStops[7][2]},
-	{lat: tStops[8][1], lng: tStops[8][2]},
-	{lat: tStops[9][1], lng: tStops[9][2]},
-	{lat: tStops[10][1], lng: tStops[10][2]},
-	{lat: tStops[11][1], lng: tStops[11][2]},
-	{lat: tStops[12][1], lng: tStops[12][2]},
-	{lat: tStops[13][1], lng: tStops[13][2]},
-	{lat: tStops[14][1], lng: tStops[14][2]},
-	{lat: tStops[15][1], lng: tStops[15][2]},
-	{lat: tStops[16][1], lng: tStops[16][2]},
-	{lat: tStops[17][1], lng: tStops[17][2]},		
-];
+var redLine1 = [];
 
-var redLine2 = [
-	{lat: tStops[12][1], lng: tStops[12][2]},
-	{lat: tStops[18][1], lng: tStops[18][2]},
-	{lat: tStops[19][1], lng: tStops[19][2]},
-	{lat: tStops[20][1], lng: tStops[20][2]},
-	{lat: tStops[21][1], lng: tStops[21][2]},
-]
+var redLine2 = [{lat: tStops[12][1], lng: tStops[12][2]}]
 		
 
 function init() {
@@ -115,6 +90,14 @@ function displayTStops() {
 }
 
 function setPolyline() {
+	var j = 1;
+	for (var i = 0; i <= 17; i++) {
+		redLine1[i] = {lat: tStops[i][1], lng: tStops[i][2]};
+	}
+	for (var i = 18; i <= 21; i++) {
+		redLine2[j] = {lat: tStops[i][1], lng: tStops[i][2]};
+		j++;
+	}
 	var redBraintree = new google.maps.Polyline({
 		path: redLine1,
 		geodesic: true,
