@@ -4,11 +4,11 @@
 	<title>MBTA Red Line</title>
 	<link rel="stylesheet" href="default-style.css"/>
 	<meta charset="utf-8"/>	 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?callback=init&sensor=true" async defer></script>	
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry" async defer></script>	
     <script type="text/javascript" src="mbta-location.js"></script>	
 
 </head>
-<body>
+<body onload="init()">
 	<div id="map"></div>
 </body>
 </html>

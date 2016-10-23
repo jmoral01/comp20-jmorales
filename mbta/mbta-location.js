@@ -28,11 +28,14 @@ var tStops = [
 	['Shawmut', 42.29312583, -71.06573796000001],
 	['Ashmont', 42.284652, -71.06448899999999]
 ];
-
 var redLine1 = [];
-
 var redLine2 = [{lat: tStops[12][1], lng: tStops[12][2]}]
-		
+var minDist = null;	
+var loc;
+var request;	
+var tMarker;
+var schedule;
+var InfoWindow;
 
 function init() {
 	myLocation = new google.maps.LatLng(myLat, myLng);
@@ -42,6 +45,7 @@ function init() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 	map = new google.maps.Map(document.getElementById('map'), myOptions);
+	InfoWindow = new google.maps.InfoWindow();
 	getLocation();
 	displayTStops();
 }
@@ -69,52 +73,44 @@ function displayLocation() {
 			scaledSize: new google.maps.Size(25,25)
 		}
 	});
+
 	marker.setMap(map);
-	haversineForm();
+	calcDistance();
 }
 
-// code used from 
-//http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
-function haversineForm() {
-	Number.prototype.toRad = function() {
-		return (this * Math.PI / 180);
-	}
-	var minDist = null;
+function calcDistance() {
 	var temp;
-	var loc;
-	var R; // miles
-	R = 3958.756;
 	for (var i = 0; i < tStops.length; i++) {
-		var x1 = tStops[i][1] - myLat;
-		var dLat = x1.toRad();
-		var x2 = tStops[i][2] - myLng;
-		var dLon = x2.toRad();
-		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.cos(myLat.toRad()) * Math.cos(tStops[i][1].toRad()) *
-				Math.sin(dLon/2) * Math.sin(dLon/2);
-		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		temp = R * c;
+		var curMarker = new google.maps.LatLng(tStops[i][1], tStops[i][2]);
+		temp = 
+			google.maps.geometry.spherical.computeDistanceBetween(myLocation, curMarker);
 		if (temp <= minDist || minDist == null) {
 			minDist = temp;
 			loc = i;
 		}		
 	}
+	minDist *= .0006214;
 	var closestLine = new google.maps.Polyline({
 		path: [{lat: myLat, lng: myLng}, 
 				{lat: tStops[loc][1], lng: tStops[loc][2]}],
 		geodesic: true,
 		strokeColor: '#0033CC',
 		strokeCapacity: 1.0,
-		strokeWeight: 2		
+		strokeWeight: 3		
 	});
 	closestLine.setMap(map);
+	marker.addListener('click', function() {
+		InfoWindow.setContent('Distance to ' + tStops[loc][0] + ' is: '
+							+ Math.round(minDist*100)/100 + ' mi');		
+		InfoWindow.open(map, marker);
+	});	
 }
 
 function displayTStops() {
 	for (var i = 0; i < tStops.length; i++) {
 		var stop = tStops[i];
 		var stopLocation = new google.maps.LatLng(stop[1], stop[2]);
-		var tMarker = new google.maps.Marker({
+		tMarker = new google.maps.Marker({
 			position: stopLocation,
 			title: stop[0],
 			icon: {
@@ -123,9 +119,37 @@ function displayTStops() {
 			}
 		});
 		tMarker.setMap(map);
+		tMarker.addListener('click', function() {
+			console.log(this);
+			console.log(tMarker);
+			getSchedule();
+			InfoWindow.setContent(
+				"Destination is: " + schedule.TripList.Trips[0].Destination +
+					", Time to next train is: " + 	
+					Math.round(schedule.TripList.Trips[0].Predictions[0].Seconds/60)
+					+ " min and " +
+					Math.round(schedule.TripList.Trips[0].Predictions[0].Seconds%60)
+					+ " sec." 
+			);
+			InfoWindow.open(map, this);
+		});
 	}
 	setPolyline();
+
 }
+
+function getSchedule() {
+	request = new XMLHttpRequest();
+	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
+	request.onreadystatechange = function() {
+		if (request.readyState == 4 && request.status == 200) {
+			schedule = JSON.parse(request.responseText);
+		} else if (request.status == 404) { 
+			window.alert("Could not get data at this time. Please try again.");
+		}
+	};
+	request.send();
+}	
 
 function setPolyline() {
 	var j = 1;
@@ -141,14 +165,14 @@ function setPolyline() {
 		geodesic: true,
 		strokeColor: '#FF0000',
 		strokeCapacity: 1.0,
-		strokeWeight: 2
+		strokeWeight: 3
 	});
 	var redAshmont = new google.maps.Polyline({
 		path: redLine2,
 		geodesic: true,
 		strokeColor: '#FF0000',
 		strokeCapacity: 1.0,
-		strokeWeight: 2
+		strokeWeight: 3
 	});	
 	redBraintree.setMap(map);
 	redAshmont.setMap(map);
