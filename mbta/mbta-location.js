@@ -4,6 +4,15 @@ var myLat = 0;
 var myLng = 0;
 var myLocation;
 var myOptions;
+var minDist = null;	
+var loc;
+var request;	
+var tMarker;
+var schedule;
+var InfoWindow;
+var tContent = "";
+var stop;
+var check = false;
 var tStops = [
 	['Alewife', 42.395428, -71.142483],	
 	['Davis', 42.39674, -71.121815],	
@@ -30,12 +39,6 @@ var tStops = [
 ];
 var redLine1 = [];
 var redLine2 = [{lat: tStops[12][1], lng: tStops[12][2]}]
-var minDist = null;	
-var loc;
-var request;	
-var tMarker;
-var schedule;
-var InfoWindow;
 
 function init() {
 	myLocation = new google.maps.LatLng(myLat, myLng);
@@ -108,7 +111,7 @@ function calcDistance() {
 
 function displayTStops() {
 	for (var i = 0; i < tStops.length; i++) {
-		var stop = tStops[i];
+		stop = tStops[i];
 		var stopLocation = new google.maps.LatLng(stop[1], stop[2]);
 		tMarker = new google.maps.Marker({
 			position: stopLocation,
@@ -120,22 +123,39 @@ function displayTStops() {
 		});
 		tMarker.setMap(map);
 		tMarker.addListener('click', function() {
-			console.log(this);
-			console.log(tMarker);
 			getSchedule();
+			tContent = "";
+			if(check) {
+				for (var j = 0; j < schedule.TripList.Trips.length; j++) {
+					for (var k = 0; k < schedule.TripList.Trips[j].Predictions.length; k++) {
+						if(this.title == schedule.TripList.Trips[j].Predictions[k].Stop) {
+							if(schedule.TripList.Trips[j].Destination == "Alewife") {
+								tContent += "<p>Destination is Alewife. Next train is in: </p>"
+ 							}
+							else if (schedule.TripList.Trips[j].Destination == "Braintree"){
+								tContent += "<p>Destination is Braintree. Next train is in: </p>"
+							}
+							else {
+								tContent += "<p>Destination is Ashmont. Next train is in: </p>"
+							}
+							tContent += "<ul><li>" + 
+							Math.round(schedule.TripList.Trips[j].Predictions[k].Seconds/60)
+							+ " min and " + 
+							Math.round(schedule.TripList.Trips[j].Predictions[k].Seconds%60)
+							+ " sec.</li></ul>";
+						}	
+					}
+				}
+			} else {
+				tContent += "<p>Data unavialable.</p>";
+			}	
 			InfoWindow.setContent(
-				"Destination is: " + schedule.TripList.Trips[0].Destination +
-					", Time to next train is: " + 	
-					Math.round(schedule.TripList.Trips[0].Predictions[0].Seconds/60)
-					+ " min and " +
-					Math.round(schedule.TripList.Trips[0].Predictions[0].Seconds%60)
-					+ " sec." 
+				tContent
 			);
 			InfoWindow.open(map, this);
 		});
 	}
 	setPolyline();
-
 }
 
 function getSchedule() {
@@ -143,8 +163,10 @@ function getSchedule() {
 	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200) {
+			check = true;
 			schedule = JSON.parse(request.responseText);
-		} else if (request.status == 404) { 
+		} else if (request.status != 200) { 
+			check = false;
 			window.alert("Could not get data at this time. Please try again.");
 		}
 	};

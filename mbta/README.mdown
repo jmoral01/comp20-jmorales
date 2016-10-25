@@ -1,0 +1,24 @@
+README for Assignment 2: mbta
+
+Implementations
+-----------------
+	Map centers on current location. 
+	Map will display all T stop locations with an image of the mbta logo. 
+	Map will display red polyline connecting all T stop markers.
+	Map will display current location with a red pin image.
+	The nearest distance is calculated using google maps api computeDistanceBetween().
+	Info window displaying distance to nearest T stop is shown upon clicking on your current location.
+	Map will display blue polyline to nearest T stop from your location.
+	Only one info window will display at a time.
+	Upon clicking on a specific marker, if the request was successful, the info window will display the upcoming trains with the information of destination and time until it arrives. 
+		NOTE: does not display information in any specific order
+	If the request was uncessesful, info window will display "Data unavailable" and program alerts that data was not able to be reached.
+	
+Resources
+-----------------
+	Did not work with anyone in class. Used examples from Ming's github from lab documentation/piazza as well as google maps javascript api documentations
+
+Hours Worked
+-----------------
+	Worked approximately 8 hours.
+	 		
