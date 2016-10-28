@@ -11,7 +11,8 @@
         $(document).ready(function() {
             $('#msg').keypress(function(e) {
                 if (e.which == 13) {
-                    $('#log').append('<p>'+$(this).val()+'</p>');
+                    var curDate = new Date().toUTCString();
+                    $('#log').prepend('<p>'+curDate+' - '+$(this).val()+'</p>');
                 }
             });
         });
