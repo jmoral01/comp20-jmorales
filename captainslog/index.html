@@ -9,10 +9,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#log').append(localStorage.getItem('message'));
             $('#msg').keypress(function(e) {
                 if (e.which == 13) {
                     var curDate = new Date().toUTCString();
                     $('#log').prepend('<p>'+curDate+' - '+$(this).val()+'</p>');
+                    var message = document.getElementById('log').innerHTML;
+                    localStorage.setItem('message', message);
                 }
             });
         });
