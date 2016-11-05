@@ -160,7 +160,7 @@ function displayTStops() {
 
 function getSchedule() {
 	request = new XMLHttpRequest();
-	request.open("get", "https://rocky-taiga-26352.herokuapp.com/redline.json", true);
+	request.open("get", "https://ancient-waters-40049.herokuapp.com/redline.json", true);
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200) {
 			check = true;
