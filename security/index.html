@@ -11,26 +11,34 @@
 	<h3>Methodology</h3>
 	<p>To find security issues and vulnerabilities, I used white box penetrative testing. I looked at the source code and found instances in which input did not seem to be secured against user input. From there, I used curl to input "corrupt" data to manifest in obvious ways.</p>
 	<h3>Abstract of Findings</h3>
-	<p>The main security concern found was Cross-Site Scripting (XSS) which is where a user can input unintended or malicious information that can lead to data corruption, receiving user data, and modification of the website among other issues.</p>
+	<p>One of the two security concerns found was Cross-Site Scripting (XSS) which is where a user can input unintended or malicious information that can lead to data corruption, receiving user data, and modification of the website among other issues.</p>
+	<p>The second concern was the ability to access the entire database from inserting a query at the end of the web page URL. This is significant because anyone can know the data which may be private or sensitive information.</p>
 	<h3>Issues Found</h3>
 	<p><ol>
 		<li>Issue: Cross-Site Scripting <ul>
 			<li>Location: /submit.json was where the security issue was inputted and /highscores was where the error was manifested.</li>
 			<li>Severity: HIGH; Malicious scripts could corrupt data, crash the site, and insert viruses.</li>
 			<li>Description: Scripts can be inserted which can cause issues from pop-up boxes to harmful scripts that can crash the site.</li>
-			<li>Proof: <table><tr><td><img src="xss_script.png" width="700" height="400" /></td></tr></table></li>
+			<li>Proof: <table><tr><td><img src="xss_script.png" width="900" height="500" /></td></tr></table></li>
 			<li>Resolution: Ensure that your inputs can't be read as code by making sure that they're passed in as the type you want.</li>			
 		</ul></li>
+		<li>Issue: nonSQL injection and Cross-Site Scripting<ul>
+			<li>Location: /scores.json</li>
+			<li>Severity: HIGH; You can access the entire database. Additionally if XXS was a problem in the data stored in the database, it will manifest in this page as well.</li>
+			<li>Description: You are able to use the query to get the entire database without having previous information by passing objects as GET parameters.</li>
+			<li>Proof: <table><tr><td><img src="db_error.png" width="900" height="500" /></td></tr></table></li>
+			<li>Resolution: Ensure that your inputs can't be read as code by making sure that they're passed in as the type you want.</li>				
+		</ul></li>	
 		<li>Issue: Cross-Site Scripting<ul>
-			<li>Location: /submit.json was where the security issue was inputted and /highscores was where the error was displayed.</li>
+			<li>Location: /scores.json</li>
 			<li>Severity: MEDIUM; Although this is also an instance of XSS vulnerability, it is less likely to lead to as much corrupted data or impact to the user since you will only see an embedded object.</li>
 			<li>Description: Unknown and unwanted objects can be added to the web page.</li>
 			<li>Proof: <table><tr><td><img src="xss_object.png" width="900" height="500" /></td></tr></table></li>
 			<li>Resolution: Ensure that your inputs can't be read as code by making sure that they're passed in as the type you want.</li>				
-		</ul></li>
-	
+		</ul></li>		
+
 	</ol></p>	
 	<h3>Conclusion</h3>
-	<p>It is important moving forward that any input to the database be of the desired type by ensuring that it is read correctly. This will help protect against Cross-Site Scripting.</p>
+	<p>It is important moving forward that any input to the database be of the desired type by ensuring that it is read correctly. This will help protect against Cross-Site Scripting and unwanted access to the entire database.</p>
 </body>
 </html>
