@@ -1,0 +1,22 @@
+README
+-------
+
+Purpose
+--------
+The purpose of this repository is to demonstrate and document some of the assignments that were done for Comp 20. 
+
+Favorite Assignment
+--------------------
+My favorite assignment was the MBTA map because it was the first real sense of what could be done in Javascript. I had done some previous projects in js but never utilizing APIs or JSON, so it was great learning how that worked.
+
+Growth
+-------
+A lot of different factors have impacted my growth. I feel that I've grown even more in how I approach problems and reaching solutions.
+
+Most Important Thing Learned
+-----------------------------
+Time management was the most important thing I learned. I am currently working on my senior design project which ate up a lot of my time. I was unable to complete an assignment because I did not manage my time well. When it came to the group work, I made a better effort to manage my multiple group projects to make sure we arrived at a demo.
+
+Topic to Learn More About
+--------------------------
+I'd like to do more with databases. I didn't get to do too much work with it but it seems like a very useful skill to have.
